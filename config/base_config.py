@@ -59,7 +59,7 @@ BROWSER_LAUNCH_TIMEOUT = 50
 
 # 是否在程序结束时自动关闭浏览器
 # 设置为False可以保持浏览器运行，便于调试
-AUTO_CLOSE_BROWSER = True
+AUTO_CLOSE_BROWSER = False
 
 # 数据保存类型选项配置,支持四种类型：csv、db、json、sqlite, 最好保存到DB，有排重的功能。
 SAVE_DATA_OPTION = "json"  # csv or db or json or sqlite
