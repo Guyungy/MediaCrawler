@@ -38,7 +38,7 @@ SAVE_LOGIN_STATE = True
 # 是否启用CDP模式 - 使用用户现有的Chrome/Edge浏览器进行爬取，提供更好的反检测能力
 # 启用后将自动检测并启动用户的Chrome/Edge浏览器，通过CDP协议进行控制
 # 这种方式使用真实的浏览器环境，包括用户的扩展、Cookie和设置，大大降低被检测的风险
-ENABLE_CDP_MODE = True
+ENABLE_CDP_MODE = False
 
 # CDP调试端口，用于与浏览器通信
 # 如果端口被占用，系统会自动尝试下一个可用端口
@@ -74,7 +74,7 @@ START_PAGE = 1
 CRAWLER_MAX_NOTES_COUNT = 500
 
 # 并发爬虫数量控制
-MAX_CONCURRENCY_NUM = 4
+MAX_CONCURRENCY_NUM = 10
 
 # 是否开启爬媒体模式（包含图片或视频资源），默认不开启爬媒体
 ENABLE_GET_MEIDAS = False
@@ -83,11 +83,11 @@ ENABLE_GET_MEIDAS = False
 ENABLE_GET_COMMENTS = True
 
 # 爬取一级评论的数量控制(单视频/帖子)
-CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES = 50
+CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES = 100
 
 # 是否开启爬二级评论模式, 默认不开启爬二级评论
 # 老版本项目使用了 db, 则需参考 schema/tables.sql line 287 增加表字段
-ENABLE_GET_SUB_COMMENTS = True
+ENABLE_GET_SUB_COMMENTS = False
 
 # 词云相关
 # 是否开启生成评论词云图
