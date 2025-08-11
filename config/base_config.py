@@ -10,7 +10,7 @@
 
 # 基础配置
 PLATFORM = "xhs"  # 平台，xhs | dy | ks | bili | wb | tieba | zhihu
-KEYWORDS = "广州耀华"  # 关键词搜索配置，以英文逗号分隔
+KEYWORDS = "上海耀华国际学校"  # 关键词搜索配置，以英文逗号分隔
 LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
 COOKIES = ""
 CRAWLER_TYPE = (
@@ -55,7 +55,7 @@ CUSTOM_BROWSER_PATH = ""
 CDP_HEADLESS = False
 
 # 浏览器启动超时时间（秒）
-BROWSER_LAUNCH_TIMEOUT = 30
+BROWSER_LAUNCH_TIMEOUT = 50
 
 # 是否在程序结束时自动关闭浏览器
 # 设置为False可以保持浏览器运行，便于调试
@@ -74,7 +74,7 @@ START_PAGE = 1
 CRAWLER_MAX_NOTES_COUNT = 500
 
 # 并发爬虫数量控制
-MAX_CONCURRENCY_NUM = 2
+MAX_CONCURRENCY_NUM = 1
 
 # 是否开启爬媒体模式（包含图片或视频资源），默认不开启爬媒体
 ENABLE_GET_MEIDAS = False

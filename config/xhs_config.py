@@ -13,7 +13,7 @@
 # 小红书平台配置
 
 # 排序方式，具体的枚举值在media_platform/xhs/field.py中
-SORT_TYPE = "popularity_descending"
+SORT_TYPE = "time_descending"
 
 # 指定笔记URL列表, 必须要携带xsec_token参数
 XHS_SPECIFIED_NOTE_URL_LIST = [
