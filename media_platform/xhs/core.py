@@ -277,7 +277,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 if not note_detail:
                     note_detail = await self.xhs_client.get_note_by_id_from_html(note_id, xsec_source, xsec_token, enable_cookie=True)
                     if not note_detail:
-                        raise Exception(f"[get_note_detail_async_task] Failed to get note detail, Id: {note_id}")
+                        utils.logger.warning(f"[get_note_detail_async_task] Failed to get note detail, skipping note_id: {note_id}")
+                        return None
 
                 note_detail.update({"xsec_token": xsec_token, "xsec_source": xsec_source})
                 return note_detail
@@ -287,6 +288,9 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 return None
             except KeyError as ex:
                 utils.logger.error(f"[XiaoHongShuCrawler.get_note_detail_async_task] have not fund note detail note_id:{note_id}, err: {ex}")
+                return None
+            except Exception as ex:
+                utils.logger.error(f"[XiaoHongShuCrawler.get_note_detail_async_task] Unexpected error for note_id:{note_id}, err: {ex}")
                 return None
 
     async def batch_get_note_comments(self, note_list: List[str], xsec_tokens: List[str]):
@@ -309,19 +313,26 @@ class XiaoHongShuCrawler(AbstractCrawler):
     async def get_comments(self, note_id: str, xsec_token: str, semaphore: asyncio.Semaphore):
         """Get note comments with keyword filtering and quantity limitation"""
         async with semaphore:
-            utils.logger.info(f"[XiaoHongShuCrawler.get_comments] Begin get note id comments {note_id}")
-            # When proxy is not enabled, increase the crawling interval
-            if config.ENABLE_IP_PROXY:
-                crawl_interval = random.random()
-            else:
-                crawl_interval = random.uniform(1, config.CRAWLER_MAX_SLEEP_SEC)
-            await self.xhs_client.get_note_all_comments(
-                note_id=note_id,
-                xsec_token=xsec_token,
-                crawl_interval=crawl_interval,
-                callback=xhs_store.batch_update_xhs_note_comments,
-                max_count=CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES,
-            )
+            try:
+                utils.logger.info(f"[XiaoHongShuCrawler.get_comments] Begin get note id comments {note_id}")
+                # When proxy is not enabled, increase the crawling interval
+                if config.ENABLE_IP_PROXY:
+                    crawl_interval = random.random()
+                else:
+                    crawl_interval = random.uniform(1, config.CRAWLER_MAX_SLEEP_SEC)
+                await self.xhs_client.get_note_all_comments(
+                    note_id=note_id,
+                    xsec_token=xsec_token,
+                    crawl_interval=crawl_interval,
+                    callback=xhs_store.batch_update_xhs_note_comments,
+                    max_count=CRAWLER_MAX_COMMENTS_COUNT_SINGLENOTES,
+                )
+            except RetryError as e:
+                utils.logger.warning(f"[XiaoHongShuCrawler.get_comments] RetryError when getting comments for note {note_id}: {e}")
+            except DataFetchError as e:
+                utils.logger.warning(f"[XiaoHongShuCrawler.get_comments] DataFetchError when getting comments for note {note_id}: {e}")
+            except Exception as e:
+                utils.logger.warning(f"[XiaoHongShuCrawler.get_comments] Unexpected error when getting comments for note {note_id}: {e}")
 
     async def create_xhs_client(self, httpx_proxy: Optional[str]) -> XiaoHongShuClient:
         """Create xhs client"""
